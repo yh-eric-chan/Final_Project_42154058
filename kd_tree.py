@@ -61,6 +61,25 @@ class KDTree:
             return pts_in
         return range_rec(rectangle, self._root, 0)
 
+    
+    def nearest_neighbor(self, target: Point):
+        best_point = None
+        best_dist = float("inf")
+        root = self._root
+        stack = [root]
+        def distance(p1: Point, p2: Point):
+            return (p1.x-p2.x)**2 + (p1.y-p2.y)**2
+        while len(stack) > 0:
+            node = stack.pop()
+            dist = distance(node.location, target)
+            if dist < best_dist:
+                best_dist = dist
+                best_point = node.location
+            if node.left is not None and distance(node.left.location, target) < best_dist:
+                stack.append(node.left)
+            if node.right is not None and distance(node.right.location, target) < best_dist:
+                stack.append(node.right)
+        print(best_point)
 
 def range_test():
     points = [Point(7, 2), Point(5, 4), Point(9, 6), Point(4, 7), Point(8, 1), Point(2, 3)]
@@ -108,7 +127,13 @@ def performance_test():
     plt.show()  
     assert sorted(result1) == sorted(result2)
 
+def nn_test():
+    points = [Point(7, 2), Point(5, 4), Point(9, 6), Point(4, 7), Point(8, 1), Point(2, 3)]
+    kd = KDTree()
+    kd.insert(points)
+    kd.nearest_neighbor(Point(2,1))
 
 if __name__ == '__main__':
     range_test()
     performance_test()
+    nn_test()
