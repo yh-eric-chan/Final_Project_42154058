@@ -75,9 +75,9 @@ class KDTree:
             if dist < best_dist:
                 best_dist = dist
                 best_point = node.location
-            if node.left is not None and distance(node.left.location, target) < best_dist:
+            if node.left and distance(node.left.location, target) < best_dist:
                 stack.append(node.left)
-            if node.right is not None and distance(node.right.location, target) < best_dist:
+            if node.right and distance(node.right.location, target) < best_dist:
                 stack.append(node.right)
         print(best_point)
 
